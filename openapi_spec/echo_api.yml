@@ -1,0 +1,234 @@
+openapi: 3.0.0
+tags:
+  - name: List
+    description: List of resource instances.
+  - name: Create
+    description: Create resource
+info:
+  title: echo
+  version: '1.0'
+  contact:
+    name: Pablo
+  description: Echo API
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /endpoints:
+    parameters: []
+    get:
+      tags:
+        - List
+      summary: List
+      operationId: get-endpoints
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vdn.api+json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  data:
+                    type: array
+                    uniqueItems: true
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          minLength: 1
+                        id:
+                          type: string
+                          minLength: 1
+                        attributes:
+                          type: object
+                          properties:
+                            verb:
+                              type: string
+                              minLength: 1
+                            path:
+                              type: string
+                              minLength: 1
+                            response:
+                              type: object
+                              required:
+                                - code
+                              properties:
+                                code:
+                                  type: number
+                                headers:
+                                  type: object
+                                body:
+                                  type: string
+                                  minLength: 1
+                          required:
+                            - verb
+                            - path
+                            - response
+                      required:
+                        - type
+                        - id
+                required:
+                  - data
+              examples:
+                get_endpoints:
+                  value:
+                    data:
+                      - type: endpoints
+                        id: '12345'
+                        attributes:
+                          - verb: GET
+                          - path: /greeting
+                          - response:
+                              code: 200
+                              headers: {}
+                              body: '"{ "message": "Hello, world" }"'
+      description: List the endpoints
+    post:
+      summary: ''
+      operationId: post-endpoints
+      description: Create endpoint
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                  properties:
+                    type:
+                      type: string
+                      minLength: 1
+                    attributes:
+                      type: object
+                      required:
+                        - verb
+                        - path
+                        - response
+                      properties:
+                        verb:
+                          type: string
+                          minLength: 1
+                        path:
+                          type: string
+                          minLength: 1
+                        response:
+                          type: object
+                          required:
+                            - code
+                            - body
+                          properties:
+                            code:
+                              type: number
+                            headers:
+                              type: object
+                            body:
+                              type: string
+                              minLength: 1
+              required:
+                - data
+            examples:
+              Create meeting request body:
+                value:
+                  data:
+                    type: endpoints
+                    attributes:
+                      verb: GET
+                      path: /greeting
+                      response:
+                        code: 200
+                        headers: {}
+                        body: '"{ "message": "Hello, world" }"'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/vdn.api+json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - type
+                      - id
+                      - attributes
+                    properties:
+                      type:
+                        type: string
+                        minLength: 1
+                      id:
+                        type: string
+                        minLength: 1
+                      attributes:
+                        type: object
+                        required:
+                          - verb
+                          - path
+                          - response
+                        properties:
+                          verb:
+                            type: string
+                            minLength: 1
+                          path:
+                            type: string
+                            minLength: 1
+                          response:
+                            type: object
+                            required:
+                              - code
+                              - headers
+                              - body
+                            properties:
+                              code:
+                                type: number
+                              headers:
+                                type: object
+                              body:
+                                type: string
+                                minLength: 1
+                required:
+                  - data
+              examples:
+                Create meeting response body:
+                  value:
+                    data:
+                      type: endpoints
+                      id: '12345'
+                      attributes:
+                        verb: GET
+                        path: /greeting
+                        response:
+                          code: 200
+                          headers: {}
+                          body: '"{ "message": "Hello, world" }"'
+                example-2:
+                  value:
+                    data:
+                      type: string
+                      id: string
+                      attributes:
+                        verb: string
+                        path: string
+                        response:
+                          code: 0
+                          headers: {}
+                          body: string
+      tags:
+        - Create
+components:
+  schemas: {}
+  securitySchemes:
+    authorization:
+      name: Bearer <token>
+      type: apiKey
+      in: header
+  examples: {}
+security:
+  - authorization: []
