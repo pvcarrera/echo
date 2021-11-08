@@ -12,6 +12,6 @@ class EchoAPI
   end
 
   def response
-    Rack::Response.new
+    Rack::Response.new({ data: [] }.to_json, 200, { 'Content-Type' => 'application/vdn.api+json' })
   end
 end
