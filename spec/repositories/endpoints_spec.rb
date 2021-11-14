@@ -15,4 +15,11 @@ RSpec.describe Repositories::Endpoints do
       expect(storage).to have_received(:write).with(collection: :endpoints, value: endpoint)
     end
   end
+
+  describe '#all' do
+    it 'request all the endpoint objects to the storage' do
+      described_class.new(storage).all
+      expect(storage).to have_received(:fetch_collection).with(:endpoints)
+    end
+  end
 end
