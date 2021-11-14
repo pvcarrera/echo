@@ -51,4 +51,20 @@ RSpec.describe EchoAPI do
       end
     end
   end
+
+  describe 'request unsuported HTTP verb' do
+    it 'returns a 404 error' do
+      put '/endpoints'
+
+      expect(last_response.status).to eq(404)
+    end
+  end
+
+  describe 'request to an undefined endpoint' do
+    it 'returns a 404 error' do
+      get '/undefined'
+
+      expect(last_response.status).to eq(404)
+    end
+  end
 end
