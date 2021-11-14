@@ -3,6 +3,7 @@
 require 'echo_api'
 require 'rack/test'
 require 'committee'
+require 'pry'
 
 RSpec.describe EchoAPI do
   include Rack::Test::Methods
@@ -65,6 +66,32 @@ RSpec.describe EchoAPI do
       get '/undefined'
 
       expect(last_response.status).to eq(404)
+    end
+  end
+
+  describe 'a POST request to the endpoint resource' do
+    let(:request_body) do
+      {
+        data: {
+          type: 'endpoints',
+          attributes: {
+            verb: 'GET',
+            path: '/greeting',
+            response: {
+              code: 200,
+              headers: { 'Connection' => 'Keep-Alive' },
+              body: '{"message":"Hello world"}'
+            }
+          }
+        }
+      }
+    end
+
+    it 'returns the newly created endpoint' do
+      header 'Content-Type', 'application/vnd.api+json'
+      post '/endpoints', request_body.to_json
+
+      assert_response_schema_confirm
     end
   end
 end
