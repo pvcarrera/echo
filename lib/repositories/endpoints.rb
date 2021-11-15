@@ -16,6 +16,10 @@ module Repositories
       storage.fetch_collection(:endpoints)
     end
 
+    def find_by_request(request)
+      all.find { |endpoint| endpoint.request == request }
+    end
+
     private
 
     attr_reader :storage

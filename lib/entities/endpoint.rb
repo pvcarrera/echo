@@ -13,6 +13,10 @@ module Entities
       @verb = verb
       @path = path
     end
+
+    def ==(other)
+      verb == other.verb && path == other.path
+    end
   end
 
   # For now the response object only makes sense as part of the Entity.

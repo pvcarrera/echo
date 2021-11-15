@@ -94,4 +94,21 @@ RSpec.describe EchoAPI do
       assert_response_schema_confirm
     end
   end
+
+  describe 'request to one of the created endpoints' do
+    let(:request) { Entities::Request.new(verb: 'GET', path: '/greeting') }
+    let(:response_body) { { message: 'Hello world' } }
+    let(:response_code) { 200 }
+    let(:response) { Entities::Response.new(code: response_code, headers: {}, body: response_body) }
+    let(:endpoint) { Entities::Endpoint.new(request: request, response: response) }
+
+    before { endpoints_repository.add(endpoint) }
+
+    it 'returns list of available mock endpoints' do
+      get '/greeting'
+
+      expect(last_response.status).to eq(response_code)
+      expect(last_response.body).to eq(response_body.to_json)
+    end
+  end
 end

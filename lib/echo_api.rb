@@ -26,6 +26,19 @@ class EchoAPI < Roda
       response.status = 201
       JSONAPI::Serializer.serialize(endpoint).to_json
     end
+
+    r.on do
+      endpoint = endpoints_repository.find_by_request(
+        Entities::Request.new(verb: r.request_method, path: r.path)
+      )
+      if endpoint
+        response.status = endpoint.code
+        endpoint.body.to_json
+      else
+        response.status = 404
+        'Not Found'
+      end
+    end
   end
 
   private
