@@ -35,6 +35,8 @@ GEM
     rainbow (3.0.0)
     regexp_parser (2.1.1)
     rexml (3.2.5)
+    roda (3.50.0)
+      rack
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -75,6 +77,7 @@ DEPENDENCIES
   pry
   rack
   rack-test
+  roda
   rspec
   rubocop
 

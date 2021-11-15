@@ -7,6 +7,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 gem 'committee'
 gem 'jsonapi-serializers'
 gem 'rack'
+gem 'roda'
 
 group :test do
   gem 'rack-test'

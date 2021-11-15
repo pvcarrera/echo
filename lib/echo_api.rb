@@ -1,54 +1,40 @@
 # frozen_string_literal: true
 
+require 'entities/endpoint'
+require 'entities/endpoint_serializer'
 require 'rack'
-require 'request_handlers/endpoints'
+require 'repositories/endpoints'
+require 'roda'
 
-class EchoAPI
-  DEFAULT_RESPONSE_HEADERS = { 'Content-Type' => 'application/vdn.api+json' }.freeze
+class EchoAPI < Roda
+  plugin :default_headers, 'Content-Type' => 'application/vdn.api+json'
 
-  def self.call(env)
-    new(env).response.finish
-  end
+  route do |r|
+    r.get 'endpoints' do
+      JSONAPI::Serializer.serialize(
+        endpoints_repository.all,
+        is_collection: true
+      ).to_json
+    end
 
-  def initialize(env)
-    @request = Rack::Request.new(env)
-  end
+    r.post 'endpoints' do
+      # At this point the committee middleware has already validate and coerce
+      # the request parameters
+      endpoint = Entities::Endpoint.build_from_params(request_parameters)
+      endpoints_repository.add(endpoint)
 
-  def response
-    resource = request.path.scan(/\w+/).first.to_s.capitalize
-    http_verb = request.request_method.to_s.downcase
-
-    # "RequestHandlers::#{resource}" is a naming convention that will be used to select
-    # the corresponding request handler class.
-    request_handler_clazz = Object.const_get("RequestHandlers::#{resource}")
-    response = request_handler_clazz.new(request).public_send(http_verb)
-
-    Rack::Response.new(response.body.to_json, response.status, response.headers)
-  rescue NoMethodError => e
-    handle_no_method_error(e)
-  rescue NameError => e
-    handle_name_error(e)
+      response.status = 201
+      JSONAPI::Serializer.serialize(endpoint).to_json
+    end
   end
 
   private
 
-  attr_reader :request
-
-  def not_found_response
-    Rack::Response.new('Not Found'.to_json, 404, DEFAULT_RESPONSE_HEADERS)
+  def endpoints_repository
+    @endpoints_repository ||= Repositories::Endpoints.new
   end
 
-  def handle_no_method_error(error)
-    raise error unless %i[get post put head patch delete].include?(error.name)
-
-    # the resource exist but it doe not support the requested HTTP verb
-    not_found_response
-  end
-
-  def handle_name_error(error)
-    raise error unless error.original_message.include?('RequestHandlers')
-
-    # resource handler does not exist
-    not_found_response
+  def request_parameters
+    @request_parameters ||= request.env['committee.params']
   end
 end
