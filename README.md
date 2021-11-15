@@ -1,5 +1,5 @@
 # Echo server
-Echo is a pet project that I use to experiment, learn and find different ways of building REST APIs with Ruby.
+Echo is an exercise created by my friend @soulim to experiment, learn and find different ways of building REST APIs with Ruby.
 
 The main purpose of Echo is to serve ephemeral/mock endpoints created with parameters specified by clients
 
