@@ -17,6 +17,7 @@ end
 
 group :development do
   gem 'rubocop', require: false
+  gem 'solargraph'
 end
 
 group :development, :test do
