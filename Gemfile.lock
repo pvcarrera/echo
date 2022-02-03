@@ -80,6 +80,7 @@ DEPENDENCIES
   roda
   rspec
   rubocop
+  zeitwerk
 
 BUNDLED WITH
    2.2.3

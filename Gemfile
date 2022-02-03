@@ -8,6 +8,7 @@ gem 'committee'
 gem 'jsonapi-serializers'
 gem 'rack'
 gem 'roda'
+gem 'zeitwerk'
 
 group :test do
   gem 'rack-test'

@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-require 'entities/endpoint'
-require 'entities/endpoint_serializer'
+require 'jsonapi-serializers'
 require 'rack'
-require 'repositories/endpoints'
 require 'roda'
 
-class EchoAPI < Roda
+class EchoApi < Roda
   plugin :default_headers, 'Content-Type' => 'application/vdn.api+json'
 
   route do |r|
