@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # frozen_string_jliteral: true
 
 require 'echo_api'
@@ -5,15 +7,15 @@ require 'rack/test'
 require 'committee'
 require 'pry'
 
-RSpec.describe EchoAPI do
+RSpec.describe EchoApi do
   include Rack::Test::Methods
   include Committee::Test::Methods
 
-  let!(:app) do
-    @app ||= Rack::Builder.parse_file('config.ru').first
-  end
-  let!(:endpoints_repository) { Repositories::Endpoints.new }
+  # Ensures Zeitwerk is loaded only once
+  before(:all) { @app ||= Rack::Builder.parse_file('config.ru').first }
+  let!(:app) { @app }
 
+  let!(:endpoints_repository) { Repositories::Endpoints.new }
   let!(:committee_options) do
     api_definition_path = File.join(
       File.dirname(__FILE__),

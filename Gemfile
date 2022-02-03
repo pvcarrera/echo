@@ -8,6 +8,7 @@ gem 'committee'
 gem 'jsonapi-serializers'
 gem 'rack'
 gem 'roda'
+gem 'zeitwerk'
 
 group :test do
   gem 'rack-test'
@@ -16,6 +17,7 @@ end
 
 group :development do
   gem 'rubocop', require: false
+  gem 'solargraph'
 end
 
 group :development, :test do
