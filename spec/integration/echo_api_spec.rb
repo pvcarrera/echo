@@ -97,6 +97,33 @@ RSpec.describe EchoApi do
     end
   end
 
+  describe 'an invalid POST request to the endpoint resource' do
+    let(:invalid_response_code) { "AAAA" }
+    let(:request_body) do
+      {
+        data: {
+          type: 'endpoints',
+          attributes: {
+            verb: 'GET',
+            path: '/greeting',
+            response: {
+              code: invalid_response_code,
+              headers: { 'Connection' => 'Keep-Alive' },
+              body: '{"message":"Hello world"}'
+            }
+          }
+        }
+      }
+    end
+
+    it 'returns a 422 error' do
+      header 'Content-Type', 'application/vnd.api+json'
+      post '/endpoints', request_body.to_json
+
+      assert_response_schema_confirm
+    end
+  end
+
   describe 'request to one of the created endpoints' do
     let(:request) { Entities::Request.new(verb: 'GET', path: '/greeting') }
     let(:response_body) { { message: 'Hello world' } }

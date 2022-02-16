@@ -7,5 +7,9 @@ loader = Zeitwerk::Loader.new
 loader.push_dir("#{__dir__}/lib")
 loader.setup
 
-use Committee::Middleware::RequestValidation, schema_path: './openapi_spec/echo_api.yml'
+use(
+  Committee::Middleware::RequestValidation,
+  schema_path: './openapi_spec/echo_api.yml',
+  error_class: Errors::Request
+)
 run EchoApi.freeze.app

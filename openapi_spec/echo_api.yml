@@ -72,18 +72,18 @@ paths:
                 required:
                   - data
               examples:
-                get_endpoints:
+                Show endpoint response:
                   value:
                     data:
                       - type: endpoints
                         id: '12345'
                         attributes:
-                          - verb: GET
-                          - path: /greeting
-                          - response:
-                              code: 200
-                              headers: {}
-                              body: '"{ "message": "Hello, world" }"'
+                          verb: GET
+                          path: /greeting
+                          response:
+                            code: 200
+                            headers: {}
+                            body: '"{ "message": "Hello, world" }"'
       description: List the endpoints
     post:
       summary: ''
@@ -196,7 +196,7 @@ paths:
                 required:
                   - data
               examples:
-                Create meeting response body:
+                Create endpoint response:
                   value:
                     data:
                       type: endpoints
@@ -208,18 +208,30 @@ paths:
                           code: 200
                           headers: {}
                           body: '"{ "message": "Hello, world" }"'
-                example-2:
-                  value:
-                    data:
-                      type: string
-                      id: string
-                      attributes:
-                        verb: string
-                        path: string
-                        response:
-                          code: 0
-                          headers: {}
-                          body: string
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          headers: {}
+          content:
+            application/vdn.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        status:
+                          type: string
+                        source:
+                          type: object
+                          properties:
+                            pointer:
+                              type: string
+                        title:
+                          type: string
+                        detail:
+                          type: string
       tags:
         - Create
 components:
