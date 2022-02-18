@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'storages/file_storage'
-
 module Repositories
   class Endpoints
     def initialize(storage = Storages::FileStorage.new)
