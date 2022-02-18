@@ -4,33 +4,6 @@ require 'forwardable'
 require 'securerandom'
 
 module Entities
-  # For now the request object only makes sense as part of the Entity.
-  # Maybe refactor to Value object
-  class Request
-    attr_reader :verb, :path
-
-    def initialize(verb:, path:)
-      @verb = verb
-      @path = path
-    end
-
-    def ==(other)
-      verb == other.verb && path == other.path
-    end
-  end
-
-  # For now the response object only makes sense as part of the Entity.
-  # Maybe refactor to Value object
-  class Response
-    attr_reader :code, :headers, :body
-
-    def initialize(code:, headers:, body:)
-      @code = code
-      @headers = headers
-      @body = body
-    end
-  end
-
   class Endpoint
     extend Forwardable
 
