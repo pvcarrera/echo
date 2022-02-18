@@ -6,6 +6,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem 'committee'
 gem 'jsonapi-serializers'
+gem 'puma'
 gem 'rack'
 gem 'roda'
 gem 'zeitwerk'
