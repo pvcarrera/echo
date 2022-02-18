@@ -21,7 +21,11 @@ RSpec.describe EchoApi do
       File.dirname(__FILE__),
       '../../openapi_spec/echo_api.yml'
     )
-    @committee_options ||= { schema: Committee::Drivers.load_from_file(api_definition_path) }
+    @committee_options ||= {
+      schema: Committee::Drivers.load_from_file(api_definition_path),
+      query_hash_key: 'rack.request.query_hash',
+      parse_response_by_content_type: false
+    }
   end
   let!(:file_storage) { Storages::FileStorage.new }
   # Committee::Test needs this method
@@ -36,7 +40,7 @@ RSpec.describe EchoApi do
     it 'returns an empty list' do
       get '/endpoints'
 
-      assert_response_schema_confirm
+      assert_response_schema_confirm(200)
     end
 
     context 'when there are available endpoints' do
@@ -50,7 +54,7 @@ RSpec.describe EchoApi do
         get '/endpoints'
 
         expect(response_body[:data]).not_to be_empty
-        assert_response_schema_confirm
+        assert_response_schema_confirm(200)
       end
     end
   end
@@ -93,7 +97,7 @@ RSpec.describe EchoApi do
       header 'Content-Type', 'application/vnd.api+json'
       post '/endpoints', request_body.to_json
 
-      assert_response_schema_confirm
+      assert_response_schema_confirm(201)
     end
   end
 
@@ -120,7 +124,7 @@ RSpec.describe EchoApi do
       header 'Content-Type', 'application/vnd.api+json'
       post '/endpoints', request_body.to_json
 
-      assert_response_schema_confirm
+      assert_response_schema_confirm(422)
     end
   end
 
